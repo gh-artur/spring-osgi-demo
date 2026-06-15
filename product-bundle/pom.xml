@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.ghartur</groupId>
+    <artifactId>springosgi-product-bundle</artifactId>
+    <version>1.0.0</version>
+    <packaging>bundle</packaging>
+
+    <properties>
+        <java.version>17</java.version>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+    </properties>
+
+    <dependencies>
+        <!-- Interfaces do contrato (Product + ProductProvider) exportadas pelo app principal -->
+        <dependency>
+            <groupId>com.ghartur</groupId>
+            <artifactId>springosgi</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- APIs OSGi — fornecidas em runtime pelo Felix embutido no app principal -->
+        <dependency>
+            <groupId>org.apache.felix</groupId>
+            <artifactId>org.apache.felix.framework</artifactId>
+            <version>7.0.5</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <version>5.1.9</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <instructions>
+                        <Bundle-SymbolicName>com.ghartur.springosgi-product-bundle</Bundle-SymbolicName>
+                        <Bundle-Version>1.0.0</Bundle-Version>
+                        <Bundle-Activator>com.ghartur.springosgi.bundle.Activator</Bundle-Activator>
+                        <!-- Importa o pacote do contrato exportado pelo sistema Felix -->
+                        <Import-Package>
+                            com.ghartur.springosgi.product;version="[1.0.0,2.0.0)",
+                            org.osgi.framework
+                        </Import-Package>
+                        <!-- Empacota apenas as classes internas do bundle -->
+                        <Private-Package>com.ghartur.springosgi.bundle</Private-Package>
+                    </instructions>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
